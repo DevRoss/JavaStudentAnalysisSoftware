@@ -28,4 +28,12 @@ public class Student {
     public String getNum() {
         return num;
     }
+
+    Double getCourseScore(String course) {
+        for (Course _course : courses) {
+            if (_course.getName().equals(course))
+                return _course.getScore();
+        }
+        return null;
+    }
 }
