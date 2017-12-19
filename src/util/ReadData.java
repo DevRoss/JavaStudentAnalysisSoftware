@@ -2,9 +2,12 @@ package util;
 
 import com.ross.Course;
 import com.ross.ScoreTable;
+import com.ross.Student;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 读取文件中的数据到内存中
@@ -25,6 +28,25 @@ public class ReadData {
             }
         }
         return courses;
+    }
+
+    public static ArrayList<Student> readStudentFile(String filePath) throws IOException {
+        ArrayList<Student> students = new ArrayList<Student>();
+        try (BufferedReader studentFile = new BufferedReader(new FileReader(filePath))) {
+            Pattern r = Pattern.compile("(\\d+) (.+)");
+            String line;
+            String num;
+            String name;
+            while ((line = studentFile.readLine()) != null) {
+                Matcher m = r.matcher(line);
+                if(m.find()){
+                    num = m.group(1);
+                    name = m.group(2);
+                    students.add(new Student(num, name));
+                }
+            }
+        }
+        return students;
     }
 
     // 从.dat文件中读取数据到内存中
