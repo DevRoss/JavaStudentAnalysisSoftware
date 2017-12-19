@@ -1,14 +1,15 @@
 package util;
 
 import com.ross.Course;
+import com.ross.ScoreTable;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 /**
  * 读取文件中的数据到内存中
+ * 数据文件夹为 resource/
+ * 文件格式为 className-courseName.dat
  */
 
 public class ReadData {
@@ -24,5 +25,17 @@ public class ReadData {
             }
         }
         return courses;
+    }
+
+    // 从.dat文件中读取数据到内存中
+    public static ScoreTable readTableData(String className, String courseName)
+            throws FileNotFoundException, IOException, ClassNotFoundException {
+        String filePath = "resource/" + className + "-" + courseName + ".dat";
+        try (ObjectInputStream tableObj = new ObjectInputStream(new FileInputStream(filePath))) {
+            return (ScoreTable) tableObj.readObject();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
