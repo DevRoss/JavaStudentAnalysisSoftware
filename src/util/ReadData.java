@@ -17,6 +17,8 @@ import java.util.regex.Pattern;
 
 public class ReadData {
 
+    // .dat文件的文件夹
+    final static String resourcePrefix = "resource/";
 
     // 从course.txt读取课程，返回 ArrayList<Course>
     public static ArrayList<Course> readCourseFile() throws IOException {
@@ -39,7 +41,7 @@ public class ReadData {
             String name;
             while ((line = studentFile.readLine()) != null) {
                 Matcher m = r.matcher(line);
-                if(m.find()){
+                if (m.find()) {
                     num = m.group(1);
                     name = m.group(2);
                     students.add(new Student(num, name));
@@ -50,9 +52,9 @@ public class ReadData {
     }
 
     // 从.dat文件中读取数据到内存中
-    public static ScoreTable readTableData(String className, String courseName)
+    public static ScoreTable readTableData(String filePath)
             throws FileNotFoundException, IOException, ClassNotFoundException {
-        String filePath = "resource/" + className + "-" + courseName + ".dat";
+//        String filePath = "resource/" + className + "-" + courseName + ".dat";
         try (ObjectInputStream tableObj = new ObjectInputStream(new FileInputStream(filePath))) {
             return (ScoreTable) tableObj.readObject();
         } catch (FileNotFoundException e) {
@@ -60,4 +62,20 @@ public class ReadData {
             return null;
         }
     }
+
+    // 获得去不带扩展名的文件名
+    public static String getFileNameNoEx(String filename) {
+        if ((filename != null) && (filename.length() > 0)) {
+            int dot = filename.lastIndexOf('.');
+            if ((dot > -1) && (dot < (filename.length()))) {
+                return filename.substring(0, dot);
+            }
+        }
+        return filename;
+    }
+
+    public static String getDatPath(File studentFile, String courseName) {
+        return resourcePrefix + getFileNameNoEx(studentFile.getName()) + "-" + courseName + ".dat";
+    }
+
 }
