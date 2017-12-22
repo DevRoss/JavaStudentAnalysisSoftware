@@ -1,5 +1,7 @@
-package com.ross;
+package com.ross.model;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import util.ReadData;
 
 import java.io.IOException;
@@ -8,17 +10,20 @@ import java.util.ArrayList;
 public class Student {
 
     private ArrayList<Course> courses;
-    private String name;
-    private String num;
+    private StringProperty name;
+    private StringProperty num;
 
     public Student(String num, String name) throws IOException {
-        this.num = num;
-        this.name = name;
+//        this.num = num;
+//        this.name = name;
+        this.num = new SimpleStringProperty(num);
+        this.name = new SimpleStringProperty(name);
+
         this.courses = ReadData.readCourseFile();
     }
 
     public String getName() {
-        return name;
+        return name.get();
     }
 
     public ArrayList<Course> getCourses() {
@@ -26,7 +31,7 @@ public class Student {
     }
 
     public String getNum() {
-        return num;
+        return num.get();
     }
 
     Double getCourseScore(String course) {

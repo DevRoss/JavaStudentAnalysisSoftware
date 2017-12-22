@@ -1,7 +1,7 @@
 package test;
 
-import com.ross.Course;
-import com.ross.Student;
+import com.ross.model.Course;
+import com.ross.model.Student;
 
 import java.io.IOException;
 

@@ -1,8 +1,8 @@
 package util;
 
-import com.ross.Course;
-import com.ross.ScoreTable;
-import com.ross.Student;
+import com.ross.model.Course;
+import com.ross.model.ScoreTable;
+import com.ross.model.Student;
 
 import java.io.*;
 import java.util.ArrayList;

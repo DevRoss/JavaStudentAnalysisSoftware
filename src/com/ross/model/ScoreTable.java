@@ -1,8 +1,7 @@
-package com.ross;
+package com.ross.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.function.DoubleToIntFunction;
 
 
 /**
@@ -31,7 +30,7 @@ public class ScoreTable implements Serializable {
     public Integer range(Double min, Double max) {
         Integer count = 0;
         for (TableItem item : items) {
-            if (min <= item.score && item.score < max) {
+            if (min <= item.score.getValue() && item.score.getValue() < max) {
                 count++;
             }
         }

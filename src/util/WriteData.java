@@ -1,6 +1,6 @@
 package util;
 
-import com.ross.ScoreTable;
+import com.ross.model.ScoreTable;
 
 import java.io.*;
 

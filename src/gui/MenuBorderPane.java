@@ -10,7 +10,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
+//import
 
 import java.io.File;
 
@@ -23,7 +23,7 @@ public class MenuBorderPane extends BorderPane {
     static private Menu fileMenu = new Menu("文件");
     static private MenuItem openMenuItem = new MenuItem("打开学生列表");
     static private MenuItem exitMenuItem = new MenuItem("退出");
-    public File file;
+    public static File file = new File("2010级网络工程10w.txt");
 
     public MenuBorderPane() {
         super();
@@ -54,14 +54,20 @@ public class MenuBorderPane extends BorderPane {
             FileChooser fileChooser = new FileChooser();
             // 格式过滤器
             fileChooser.getExtensionFilters().add(
-                    new FileChooser.ExtensionFilter("TXT", "*")
+                    new FileChooser.ExtensionFilter("TXT", "*.txt")
             );
             fileChooser.setInitialDirectory(new File("").getAbsoluteFile());
             file = fileChooser.showOpenDialog(new Stage());
 
+            // Start a new scene
+
+
         }
     }
 
+    public File getFile() {
+        return file;
+    }
 
     @Override
     public int hashCode() {

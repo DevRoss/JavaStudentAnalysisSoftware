@@ -1,6 +1,6 @@
 package test;
 
-import com.ross.Student;
+import com.ross.model.Student;
 import util.ReadData;
 
 import java.io.IOException;
