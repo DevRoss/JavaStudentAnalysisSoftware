@@ -20,6 +20,7 @@ public class MainApp extends Application {
     private Stage primaryStage;
     private VBox rootLayout;
     private ObservableList<TableItem> studentData = FXCollections.observableArrayList();
+    private Scene scene;
 
 
     public MainApp() {
@@ -57,9 +58,8 @@ public class MainApp extends Application {
             // Show the scene containing the root layout.
             TableItemOverviewController controller = loader.getController();
             controller.setMainApp(this);
-            Scene scene = new Scene(rootLayout);
-
-            primaryStage.setScene(scene);
+            this.scene = new Scene(rootLayout, 1280, 720);
+            primaryStage.setScene(this.scene);
             primaryStage.show();
 
         } catch (IOException e) {
@@ -79,5 +79,13 @@ public class MainApp extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public VBox getRootLayout() {
+        return rootLayout;
+    }
+
+    public Scene getScene() {
+        return scene;
     }
 }

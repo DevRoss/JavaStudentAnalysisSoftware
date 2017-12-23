@@ -4,9 +4,15 @@ import com.ross.MainApp;
 import com.ross.model.ScoreTable;
 import com.ross.model.TableItem;
 import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.*;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -20,9 +26,11 @@ import util.ReadData;
 import util.WriteData;
 
 import java.awt.*;
+import java.awt.MenuBar;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.StandardCopyOption;
+import java.text.NumberFormat;
 
 public class TableItemOverviewController {
 
@@ -72,6 +80,9 @@ public class TableItemOverviewController {
     @FXML
     private Text avg;
 
+    // 可视化
+    @FXML
+    private PieChart pieChart;
     private File file = new File("");
     private File datFile = new File("");
     private String courseName = "";
@@ -105,6 +116,7 @@ public class TableItemOverviewController {
             ((TableItem) event.getTableView().getItems().get(event.getTablePosition().getRow())).setScore(value);
 //            table.refresh();
             analyse();
+            refreshPieChart();
 
         });
 
@@ -127,6 +139,29 @@ public class TableItemOverviewController {
 
     }
 
+    private ObservableList<Data> getChartData() {
+        ObservableList<Data> answer = FXCollections.observableArrayList();
+        NumberFormat perFormat = NumberFormat.getPercentInstance();
+        perFormat.setMinimumFractionDigits(2);
+        answer.addAll(new Data("<60分" + perFormat.format(scoreTable.rangePercentage(0.0, 60.0)), scoreTable.range(0.0, 60.0)),
+                new Data("60-70分" + perFormat.format(scoreTable.rangePercentage(60.0, 70.0)), scoreTable.range(60.0, 70.0)),
+                new Data("70-80分" + perFormat.format(scoreTable.rangePercentage(70.0, 80.0)), scoreTable.range(70.0, 80.0)),
+                new Data("80-90分" + perFormat.format(scoreTable.rangePercentage(80.0, 90.0)), scoreTable.range(80.0, 90.0)),
+                new Data("90-100分" + perFormat.format(scoreTable.rangePercentage(90.0, 100.0)), scoreTable.range(90.0, 100.0))
+                );
+        return answer;
+    }
+
+//    private void initPieChart(){
+//        pieChart = new PieChart();
+//        pieChart.ti
+//    }
+
+    private void refreshPieChart(){
+        pieChart.getData().clear();
+        pieChart.getData().addAll(getChartData());
+
+    }
 
     @FXML
     private void openFileAction() throws IOException, ClassNotFoundException {
@@ -166,6 +201,7 @@ public class TableItemOverviewController {
         mainApp.getStudentData().addAll(scoreTable.getItems());
         table.setItems(mainApp.getStudentData());
         analyse(); // 刷新统计数据
+        refreshPieChart();
 
         // 显示路径
         pathText.setText(file.getAbsolutePath() + "\t共" + scoreTable.getSize().toString() + "人");
