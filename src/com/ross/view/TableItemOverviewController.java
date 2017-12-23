@@ -3,6 +3,7 @@ package com.ross.view;
 import com.ross.MainApp;
 import com.ross.model.ScoreTable;
 import com.ross.model.TableItem;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -114,8 +115,11 @@ public class TableItemOverviewController {
 
     private MainApp mainApp;
 
+    private NumberFormat perFormat;
+
     public TableItemOverviewController() {
-        super();
+        perFormat = NumberFormat.getPercentInstance();
+        perFormat.setMinimumFractionDigits(2);
     }
 
     @FXML
@@ -133,8 +137,8 @@ public class TableItemOverviewController {
             ((TableItem) event.getTableView().getItems().get(event.getTablePosition().getRow())).setScore(value);
 //            table.refresh();
             analyse();
-            refreshPieChart();
-            refreshBarChart();
+//            refreshPieChart();
+//            refreshBarChart();
 
         });
 
@@ -146,11 +150,11 @@ public class TableItemOverviewController {
         numOfbetween70_80.setText(scoreTable.range(70.0, 80.0).toString());
         numOfbetween80_90.setText(scoreTable.range(80.0, 90.0).toString());
         numOfover90.setText(scoreTable.range(90.0, 100.0).toString());
-        perOfunder60.setText(scoreTable.rangePercentage(0.0, 60.0).toString());
-        perOfbetween60_70.setText(scoreTable.rangePercentage(60.0, 70.0).toString());
-        perOfbetween70_80.setText(scoreTable.rangePercentage(70.0, 80.0).toString());
-        perOfbetween80_90.setText(scoreTable.rangePercentage(80.0, 90.0).toString());
-        perOfover90.setText(scoreTable.rangePercentage(90.0, 100.0).toString());
+        perOfunder60.setText(perFormat.format(scoreTable.rangePercentage(0.0, 60.0)));
+        perOfbetween60_70.setText(perFormat.format(scoreTable.rangePercentage(60.0, 70.0)));
+        perOfbetween70_80.setText(perFormat.format(scoreTable.rangePercentage(70.0, 80.0)));
+        perOfbetween80_90.setText(perFormat.format(scoreTable.rangePercentage(80.0, 90.0)));
+        perOfover90.setText(perFormat.format(scoreTable.rangePercentage(90.0, 100.0)));
         highest.setText(scoreTable.getHighest().toString());
         lowest.setText(scoreTable.getLowest().toString());
         avg.setText(scoreTable.getAvg().toString());
@@ -182,8 +186,7 @@ public class TableItemOverviewController {
 
     private ObservableList<Data> getPieChartData() {
         ObservableList<Data> answer = FXCollections.observableArrayList();
-        NumberFormat perFormat = NumberFormat.getPercentInstance();
-        perFormat.setMinimumFractionDigits(2);
+
         answer.addAll(new Data(under60 + perFormat.format(scoreTable.rangePercentage(0.0, 60.0)), scoreTable.range(0.0, 60.0)),
                 new Data(btwn60_70 + perFormat.format(scoreTable.rangePercentage(60.0, 70.0)), scoreTable.range(60.0, 70.0)),
                 new Data(btwn70_80 + perFormat.format(scoreTable.rangePercentage(70.0, 80.0)), scoreTable.range(70.0, 80.0)),
@@ -270,5 +273,10 @@ public class TableItemOverviewController {
             if (searchField.getText() != null)
                 filteredTable.setAll(Filter.filter(scoreTable, searchField.getText()));
         });
+    }
+
+    @FXML
+    private void exit() {
+        Platform.exit();
     }
 }
