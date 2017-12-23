@@ -13,12 +13,14 @@ import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.*;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
 import javafx.util.converter.DoubleStringConverter;
+import util.Filter;
 import util.ReadData;
 import util.WriteData;
 
@@ -100,6 +102,9 @@ public class TableItemOverviewController {
     private String courseName = "";
     final static File workingDir = new File("");
     private ScoreTable scoreTable;
+    private ObservableList<TableItem> filteredTable = FXCollections.observableArrayList();
+    @FXML
+    private TextField searchField;
 
     @FXML
     private Menu fileMenu;
@@ -231,10 +236,12 @@ public class TableItemOverviewController {
         // 清除数据后重新添加
 //        mainApp.getStudentData().clear();
         mainApp.getStudentData().addAll(scoreTable.getItems());
-        table.setItems(mainApp.getStudentData());
+        filteredTable.addAll(scoreTable.getItems());
+        table.setItems(filteredTable);
         analyse(); // 刷新统计数据
         refreshPieChart();
         refreshBarChart();
+        initSearchField();
 
         // 显示路径
         pathText.setText(file.getAbsolutePath() + "\t共" + scoreTable.getSize().toString() + "人");
@@ -252,5 +259,16 @@ public class TableItemOverviewController {
     @FXML
     private void save() throws IOException {
         WriteData.writeTable2File(scoreTable, ReadData.getDatPath(file, "数据库系统"));
+    }
+
+    private void initSearchField() {
+        searchField.setOnKeyPressed(event -> {
+            if (searchField.getText() != null)
+                filteredTable.setAll(Filter.filter(scoreTable, searchField.getText()));
+        });
+        searchField.setOnKeyReleased(event -> {
+            if (searchField.getText() != null)
+                filteredTable.setAll(Filter.filter(scoreTable, searchField.getText()));
+        });
     }
 }
