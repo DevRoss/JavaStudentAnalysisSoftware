@@ -10,13 +10,13 @@ import java.io.*;
 public class WriteData {
 
     // 传入成绩单对象，将对象储存但文件中
-    public static void writeTable2File(ScoreTable scoreTable, String className, String courseName) throws FileNotFoundException, IOException {
-        String filePath = "resource/" + className + "-" + courseName + ".dat";
+    public static void writeTable2File(ScoreTable scoreTable, String pathToSave) throws IOException {
+//        String filePath = "resource/" + className + "-" + courseName + ".dat";
 
         File f = new File("resource/");
         if (!f.exists()) f.mkdir();
 
-        try (ObjectOutputStream _scoreTable = new ObjectOutputStream(new FileOutputStream(filePath))) {
+        try (ObjectOutputStream _scoreTable = new ObjectOutputStream(new FileOutputStream(pathToSave))) {
 
             _scoreTable.writeObject(scoreTable);
         }

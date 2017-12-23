@@ -3,20 +3,28 @@ package com.ross.view;
 import com.ross.MainApp;
 import com.ross.model.ScoreTable;
 import com.ross.model.TableItem;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
 import javafx.util.converter.DoubleStringConverter;
 import util.ReadData;
+import util.WriteData;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.StandardCopyOption;
 
 public class TableItemOverviewController {
 
+    // 表成员
     @FXML
     private TableView<TableItem> table;
     @FXML
@@ -26,11 +34,40 @@ public class TableItemOverviewController {
     @FXML
     private TableColumn<TableItem, Double> scoreColumn;
 
+    // 文件路径
+    @FXML
+    private Text pathText;
+
+    // 人数
+    @FXML
+    private Text numOfunder60;
+    @FXML
+    private Text numOfbetween60_70;
+    @FXML
+    private Text numOfbetween70_80;
+    @FXML
+    private Text numOfbetween80_90;
+    @FXML
+    private Text numOfover90;
+
+    //  百分比
+    @FXML
+    private Text perOfunder60;
+    @FXML
+    private Text perOfbetween60_70;
+    @FXML
+    private Text perOfbetween70_80;
+    @FXML
+    private Text perOfbetween80_90;
+    @FXML
+    private Text perOfover90;
+
 
     private File file = new File("");
     private File datFile = new File("");
     private String courseName = "";
     final static File workingDir = new File("");
+    private ScoreTable scoreTable;
 
     @FXML
     private Menu fileMenu;
@@ -46,14 +83,37 @@ public class TableItemOverviewController {
 
     @FXML
     private void initialize() {
-//        table.setEditable(true);
+        initTable();
+    }
+
+    private void initTable() {
         numColumn.setCellValueFactory(cellData -> cellData.getValue().num);
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().name);
         scoreColumn.setCellValueFactory(cellData -> cellData.getValue().score);
         scoreColumn.setCellFactory(new ScoreCellFactory());
+        scoreColumn.setOnEditCommit(event -> {
+//            table.getItems().set(event.getTablePosition().getRow(), )
+            final Double value = event.getNewValue() > 0.0 ? event.getNewValue() : event.getOldValue();
+            ((TableItem) event.getTableView().getItems().get(event.getTablePosition().getRow())).setScore(value);
+//            table.refresh();
+        });
+
     }
 
-//    @FXML
+    private void analyse() {
+        numOfunder60.setText(scoreTable.range(0.0, 60.0).toString());
+        numOfbetween60_70.setText(scoreTable.range(60.0, 70.0).toString());
+        numOfbetween70_80.setText(scoreTable.range(70.0, 80.0).toString());
+        numOfbetween80_90.setText(scoreTable.range(80.0, 90.0).toString());
+        numOfover90.setText(scoreTable.range(90.0, 100.0).toString());
+        perOfunder60.setText(scoreTable.rangePercentage(0.0, 60.0).toString());
+        perOfbetween60_70.setText(scoreTable.rangePercentage(60.0, 70.0).toString());
+        perOfbetween70_80.setText(scoreTable.rangePercentage(70.0, 80.0).toString());
+        perOfbetween80_90.setText(scoreTable.rangePercentage(80.0, 90.0).toString());
+        perOfover90.setText(scoreTable.rangePercentage(90.0, 100.0).toString());
+
+    }
+
 
     @FXML
     private void openFileAction() throws IOException, ClassNotFoundException {
@@ -82,7 +142,7 @@ public class TableItemOverviewController {
         System.out.println(datFile);
 
 
-        ScoreTable scoreTable;
+//        ScoreTable scoreTable;
         if (datFile.exists()) {
             scoreTable = ReadData.readTableData(ReadData.getDatPath(file, courseName));
             System.out.println("DAT 读取成功");
@@ -92,6 +152,9 @@ public class TableItemOverviewController {
 //        mainApp.getStudentData().clear();
         mainApp.getStudentData().addAll(scoreTable.getItems());
         table.setItems(mainApp.getStudentData());
+
+        // 显示路径
+        pathText.setText(file.getAbsolutePath() + "\t共" + scoreTable.getSize().toString() + "人");
     }
 
     public void setMainApp(MainApp mainApp) {
@@ -104,12 +167,7 @@ public class TableItemOverviewController {
     }
 
     @FXML
-    private void onEditCommit() {
-
-    }
-
-    @FXML
-    private void onEditCancel() {
-
+    private void save() throws IOException {
+        WriteData.writeTable2File(scoreTable, ReadData.getDatPath(file, "数据库系统"));
     }
 }

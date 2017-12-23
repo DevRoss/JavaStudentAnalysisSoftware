@@ -21,7 +21,7 @@ public class testTable {
 //        students.add(new Student("123456789", "姆"));
         students = ReadData.readStudentFile("2011级网络工程1k.txt");
         scoreTable = new ScoreTable(students, "数据库系统");
-        WriteData.writeTable2File(scoreTable, "2011级网络工程1k", "数据库系统");
+        WriteData.writeTable2File(scoreTable, "resource/2011级网络工程1k-数据库系统.dat");
 
         scoreTable = ReadData.readTableData(ReadData.getDatPath(new File("2011级网络工程1k.txt"), "数据库系统"));
         for (TableItem tableItem : scoreTable.getItems()) {
