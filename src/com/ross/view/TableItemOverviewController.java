@@ -124,6 +124,7 @@ public class TableItemOverviewController {
 
     @FXML
     private void initialize() {
+        initBarChart();
         initTable();
     }
 
@@ -137,8 +138,8 @@ public class TableItemOverviewController {
             ((TableItem) event.getTableView().getItems().get(event.getTablePosition().getRow())).setScore(value);
 //            table.refresh();
             analyse();
-//            refreshPieChart();
-//            refreshBarChart();
+            refreshPieChart();
+            refreshBarChart();
 
         });
 
@@ -162,25 +163,27 @@ public class TableItemOverviewController {
     }
 
 
-    private XYChart.Series<String, Integer> getBarChartData() {
+    private XYChart.Series<String, Integer> getBarChartData(boolean init) {
+
         XYChart.Series<String, Integer> series = new XYChart.Series<String, Integer>();
-//        XYChart.Series<String, Integer> series60_70 = new XYChart.Series<String, Integer>();
-//        XYChart.Series<String, Integer> series70_80 = new XYChart.Series<String, Integer>();
-//        XYChart.Series<String, Integer> series = new XYChart.Series<String, Integer>();
-//        XYChart.Series<String, Integer> series60 = new XYChart.Series<String, Integer>();
-        series.getData().add(new XYChart.Data<>(under60, scoreTable.range(0.0, 60.0)));
-        series.getData().add(new XYChart.Data<>(btwn60_70, scoreTable.range(60.0, 70.0)));
-        series.getData().add(new XYChart.Data<>(btwn70_80, scoreTable.range(70.0, 80.0)));
-        series.getData().add(new XYChart.Data<>(btwn80_90, scoreTable.range(80.0, 90.0)));
-        series.getData().add(new XYChart.Data<>(over90, scoreTable.range(90.0, 100.0)));
+        if (!init) {
+            series.getData().add(new XYChart.Data<>(under60, scoreTable.range(0.0, 60.0)));
+            series.getData().add(new XYChart.Data<>(btwn60_70, scoreTable.range(60.0, 70.0)));
+            series.getData().add(new XYChart.Data<>(btwn70_80, scoreTable.range(70.0, 80.0)));
+            series.getData().add(new XYChart.Data<>(btwn80_90, scoreTable.range(80.0, 90.0)));
+            series.getData().add(new XYChart.Data<>(over90, scoreTable.range(90.0, 100.0)));
+        } else series.getData().add(new XYChart.Data<>("", 0));
         return series;
 
     }
 
+    private void initBarChart(){
+     barChart.getData().add(getBarChartData(true));
+    }
 
     private void refreshBarChart() {
-        barChart.getData().clear();
-        barChart.getData().add(getBarChartData());
+//        barChart.getData().clear();
+        barChart.getData().setAll(getBarChartData(false));
     }
 
 
