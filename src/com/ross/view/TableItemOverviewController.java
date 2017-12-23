@@ -8,10 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.PieChart;
+import javafx.scene.chart.*;
 import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.*;
 import javafx.scene.control.Menu;
@@ -83,6 +80,21 @@ public class TableItemOverviewController {
     // 可视化
     @FXML
     private PieChart pieChart;
+
+    @FXML
+    private BarChart<String, Integer> barChart;
+    @FXML
+    CategoryAxis lineXAxis;
+    @FXML
+    NumberAxis lineYAxis;
+
+    final static String under60 = "<60分";
+    final static String btwn60_70 = "60-69分";
+    final static String btwn70_80 = "70-79分";
+    final static String btwn80_90 = "80-89分";
+    final static String over90 = ">=90分";
+
+
     private File file = new File("");
     private File datFile = new File("");
     private String courseName = "";
@@ -117,6 +129,7 @@ public class TableItemOverviewController {
 //            table.refresh();
             analyse();
             refreshPieChart();
+            refreshBarChart();
 
         });
 
@@ -139,27 +152,46 @@ public class TableItemOverviewController {
 
     }
 
-    private ObservableList<Data> getChartData() {
+
+    private XYChart.Series<String, Integer> getBarChartData() {
+        XYChart.Series<String, Integer> series = new XYChart.Series<String, Integer>();
+//        XYChart.Series<String, Integer> series60_70 = new XYChart.Series<String, Integer>();
+//        XYChart.Series<String, Integer> series70_80 = new XYChart.Series<String, Integer>();
+//        XYChart.Series<String, Integer> series = new XYChart.Series<String, Integer>();
+//        XYChart.Series<String, Integer> series60 = new XYChart.Series<String, Integer>();
+        series.getData().add(new XYChart.Data<>(under60, scoreTable.range(0.0, 60.0)));
+        series.getData().add(new XYChart.Data<>(btwn60_70, scoreTable.range(60.0, 70.0)));
+        series.getData().add(new XYChart.Data<>(btwn70_80, scoreTable.range(70.0, 80.0)));
+        series.getData().add(new XYChart.Data<>(btwn80_90, scoreTable.range(80.0, 90.0)));
+        series.getData().add(new XYChart.Data<>(over90, scoreTable.range(90.0, 100.0)));
+        return series;
+
+    }
+
+
+    private void refreshBarChart() {
+        barChart.getData().clear();
+        barChart.getData().add(getBarChartData());
+    }
+
+
+    private ObservableList<Data> getPieChartData() {
         ObservableList<Data> answer = FXCollections.observableArrayList();
         NumberFormat perFormat = NumberFormat.getPercentInstance();
         perFormat.setMinimumFractionDigits(2);
-        answer.addAll(new Data("<60分" + perFormat.format(scoreTable.rangePercentage(0.0, 60.0)), scoreTable.range(0.0, 60.0)),
-                new Data("60-70分" + perFormat.format(scoreTable.rangePercentage(60.0, 70.0)), scoreTable.range(60.0, 70.0)),
-                new Data("70-80分" + perFormat.format(scoreTable.rangePercentage(70.0, 80.0)), scoreTable.range(70.0, 80.0)),
-                new Data("80-90分" + perFormat.format(scoreTable.rangePercentage(80.0, 90.0)), scoreTable.range(80.0, 90.0)),
-                new Data("90-100分" + perFormat.format(scoreTable.rangePercentage(90.0, 100.0)), scoreTable.range(90.0, 100.0))
-                );
+        answer.addAll(new Data(under60 + perFormat.format(scoreTable.rangePercentage(0.0, 60.0)), scoreTable.range(0.0, 60.0)),
+                new Data(btwn60_70 + perFormat.format(scoreTable.rangePercentage(60.0, 70.0)), scoreTable.range(60.0, 70.0)),
+                new Data(btwn70_80 + perFormat.format(scoreTable.rangePercentage(70.0, 80.0)), scoreTable.range(70.0, 80.0)),
+                new Data(btwn80_90 + perFormat.format(scoreTable.rangePercentage(80.0, 90.0)), scoreTable.range(80.0, 90.0)),
+                new Data(over90 + perFormat.format(scoreTable.rangePercentage(90.0, 100.0)), scoreTable.range(90.0, 100.0))
+        );
         return answer;
     }
 
-//    private void initPieChart(){
-//        pieChart = new PieChart();
-//        pieChart.ti
-//    }
 
-    private void refreshPieChart(){
+    private void refreshPieChart() {
         pieChart.getData().clear();
-        pieChart.getData().addAll(getChartData());
+        pieChart.getData().addAll(getPieChartData());
 
     }
 
@@ -202,6 +234,7 @@ public class TableItemOverviewController {
         table.setItems(mainApp.getStudentData());
         analyse(); // 刷新统计数据
         refreshPieChart();
+        refreshBarChart();
 
         // 显示路径
         pathText.setText(file.getAbsolutePath() + "\t共" + scoreTable.getSize().toString() + "人");

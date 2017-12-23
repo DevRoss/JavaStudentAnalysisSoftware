@@ -83,14 +83,14 @@
                <children>
                   <SplitPane dividerPositions="0.5" layoutX="8.0" AnchorPane.bottomAnchor="264.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <items>
-                        <StackedBarChart layoutX="8.0" layoutY="6.0" AnchorPane.bottomAnchor="235.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="475.0" AnchorPane.topAnchor="6.0">
+                        <BarChart fx:id="barChart">
                           <xAxis>
-                            <CategoryAxis side="BOTTOM" />
+                            <CategoryAxis fx:id="lineXAxis" side="BOTTOM" />
                           </xAxis>
                           <yAxis>
-                            <NumberAxis side="LEFT" />
+                            <NumberAxis fx:id="lineYAxis" side="LEFT" />
                           </yAxis>
-                        </StackedBarChart>
+                        </BarChart>
                         <PieChart fx:id="pieChart" layoutX="429.0" title="成绩百分比" AnchorPane.bottomAnchor="241.0" AnchorPane.leftAnchor="429.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </items>
                   </SplitPane>
