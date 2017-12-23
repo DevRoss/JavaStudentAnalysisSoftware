@@ -104,9 +104,9 @@
                         <Label prefHeight="20.0" prefWidth="454.0" text="最高分" />
                         <Label text="最低分" GridPane.rowIndex="1" />
                         <Label text="平均分" GridPane.rowIndex="2" />
-                        <Text fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" underline="true" GridPane.columnIndex="1" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Text fx:id="highest" fontSmoothingType="LCD" strokeType="OUTSIDE" strokeWidth="0.0" underline="true" GridPane.columnIndex="1" />
+                        <Text fx:id="lowest" strokeType="OUTSIDE" strokeWidth="0.0" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Text fx:id="avg" strokeType="OUTSIDE" strokeWidth="0.0" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
                   <GridPane gridLinesVisible="true" layoutX="14.0" layoutY="428.0" prefHeight="160.0" prefWidth="433.0">
@@ -131,24 +131,20 @@
                         <Label text="优秀（90&lt;=分数&lt;100）：" GridPane.rowIndex="5" />
                         <Label text="人数" textAlignment="CENTER" GridPane.columnIndex="1" />
                         <Label text="百分比" GridPane.columnIndex="2" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                        <Text fx:id="perOfunder60" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Text fx:id="numOfunder60" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Text fx:id="numOfbetween60_70" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Text fx:id="numOfbetween70_80" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Text fx:id="numOfbetween80_90" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Text fx:id="perOfbetween60_70" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <Text fx:id="numOfover90" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Text fx:id="perOfbetween70_80" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                        <Text fx:id="perOfbetween80_90" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                        <Text fx:id="perOfover90" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
                      </children>
                   </GridPane>
-                  <HBox layoutX="684.0" layoutY="629.0" spacing="30.0">
-                     <children>
-                        <Button layoutX="680.0" layoutY="625.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="60.0" text="保存" />
-                        <Button layoutX="762.0" layoutY="625.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="60.0" text="取消" />
-                     </children>
-                  </HBox>
+                  <HBox layoutX="684.0" layoutY="629.0" spacing="30.0" />
+                  <Button layoutX="808.0" layoutY="629.0" mnemonicParsing="false" onAction="#save" prefHeight="30.0" prefWidth="60.0" text="保存" />
                </children>
             </AnchorPane>
         </items>

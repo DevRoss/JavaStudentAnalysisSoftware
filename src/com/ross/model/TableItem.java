@@ -8,12 +8,12 @@ import javafx.beans.value.ObservableValue;
 
 import java.io.*;
 
-public class TableItem implements Externalizable {
+public class TableItem implements Externalizable, Comparable<TableItem> {
     public StringProperty name;
     public StringProperty num;
     public ObservableValue<Double> score;
 
-    public TableItem(){
+    public TableItem() {
         super();
     }
 
@@ -76,5 +76,10 @@ public class TableItem implements Externalizable {
         out.writeUTF(getName());
         out.writeUTF(getNum());
         out.writeDouble(getScore());
+    }
+
+    @Override
+    public int compareTo(TableItem o) {
+        return this.getScore().compareTo(o.getScore());
     }
 }

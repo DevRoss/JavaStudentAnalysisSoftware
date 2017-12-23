@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 /**
@@ -43,6 +44,20 @@ public class ScoreTable implements Serializable {
     // 返回在区间 [min, max) 的人数百分比
     public Double rangePercentage(Double min, Double max) {
         return range(min, max) / getSize().doubleValue();
+    }
+
+    public Double getHighest() {
+        return Collections.max(items).getScore();
+    }
+
+    public Double getLowest() {
+        return Collections.min(items).getScore();
+    }
+
+    public Double getAvg() {
+        Double sum = 0.0;
+        for (TableItem i : items) sum += i.getScore();
+        return sum / this.getSize();
     }
 
 }

@@ -4,7 +4,9 @@ import com.ross.MainApp;
 import com.ross.model.ScoreTable;
 import com.ross.model.TableItem;
 import javafx.beans.binding.Bindings;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -62,6 +64,13 @@ public class TableItemOverviewController {
     @FXML
     private Text perOfover90;
 
+    // 最高，最低，平均分
+    @FXML
+    private Text highest;
+    @FXML
+    private Text lowest;
+    @FXML
+    private Text avg;
 
     private File file = new File("");
     private File datFile = new File("");
@@ -92,10 +101,11 @@ public class TableItemOverviewController {
         scoreColumn.setCellValueFactory(cellData -> cellData.getValue().score);
         scoreColumn.setCellFactory(new ScoreCellFactory());
         scoreColumn.setOnEditCommit(event -> {
-//            table.getItems().set(event.getTablePosition().getRow(), )
             final Double value = event.getNewValue() > 0.0 ? event.getNewValue() : event.getOldValue();
             ((TableItem) event.getTableView().getItems().get(event.getTablePosition().getRow())).setScore(value);
 //            table.refresh();
+            analyse();
+
         });
 
     }
@@ -111,6 +121,9 @@ public class TableItemOverviewController {
         perOfbetween70_80.setText(scoreTable.rangePercentage(70.0, 80.0).toString());
         perOfbetween80_90.setText(scoreTable.rangePercentage(80.0, 90.0).toString());
         perOfover90.setText(scoreTable.rangePercentage(90.0, 100.0).toString());
+        highest.setText(scoreTable.getHighest().toString());
+        lowest.setText(scoreTable.getLowest().toString());
+        avg.setText(scoreTable.getAvg().toString());
 
     }
 
@@ -152,6 +165,7 @@ public class TableItemOverviewController {
 //        mainApp.getStudentData().clear();
         mainApp.getStudentData().addAll(scoreTable.getItems());
         table.setItems(mainApp.getStudentData());
+        analyse(); // 刷新统计数据
 
         // 显示路径
         pathText.setText(file.getAbsolutePath() + "\t共" + scoreTable.getSize().toString() + "人");
