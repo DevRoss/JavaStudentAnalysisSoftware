@@ -7,10 +7,16 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class MainApp extends Application {
@@ -34,11 +40,14 @@ public class MainApp extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("AddressApp");
         this.primaryStage.setOnCloseRequest(event -> exit());
-
+        try (FileInputStream image = new FileInputStream("icon.jpg")) {
+            primaryStage.getIcons().add(new Image(image));
+        } catch (IOException e) {
+        }
         initRootLayout();
 
 //        showPersonOverview();
@@ -63,7 +72,8 @@ public class MainApp extends Application {
             primaryStage.show();
 
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            showHelp();
         }
     }
 
@@ -101,5 +111,18 @@ public class MainApp extends Application {
 
     public Stage getHelpStage() {
         return helpStage;
+    }
+
+
+    public void showHelp() {
+        getHelpStage().setTitle("帮助");
+        VBox root = new VBox();
+        root.setSpacing(5);
+        root.setAlignment(Pos.CENTER);
+        Label mainHelp = new Label("将course.txt文件放在当前文件夹\n成绩单资源文件保存后会放在resource文件夹");
+        root.getChildren().add(mainHelp);
+        Scene scene = new Scene(root, 600, 100);
+        getHelpStage().setScene(scene);
+        getHelpStage().show();
     }
 }

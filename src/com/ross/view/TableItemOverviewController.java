@@ -334,16 +334,6 @@ public class TableItemOverviewController {
 
     @FXML
     private void showHelp() {
-        mainApp.getHelpStage().setTitle("帮助");
-        VBox root = new VBox();
-        root.setSpacing(5);
-        root.setAlignment(Pos.CENTER);
-
-        Label mainHelp = new Label("将course.txt文件放在当前文件夹\n成绩单资源文件保存后会放在resource文件夹");
-        Label searchHelp = new Label("输入搜索关键词，可同时搜索学号，姓名，成绩");
-        root.getChildren().addAll(mainHelp, searchHelp);
-        Scene scene = new Scene(root, 600, 100);
-        mainApp.getHelpStage().setScene(scene);
-        mainApp.getHelpStage().show();
+        mainApp.showHelp();
     }
 }
