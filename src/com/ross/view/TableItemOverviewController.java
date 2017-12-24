@@ -4,13 +4,9 @@ import com.ross.MainApp;
 import com.ross.model.ScoreTable;
 import com.ross.model.TableItem;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,24 +14,14 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.*;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
-import javafx.util.Callback;
-import javafx.util.converter.DefaultStringConverter;
-import javafx.util.converter.DoubleStringConverter;
 import util.Filter;
 import util.ReadData;
 import util.WriteData;
 
-import java.awt.*;
-import java.awt.MenuBar;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.StandardCopyOption;
 import java.text.NumberFormat;
 
 public class TableItemOverviewController {
@@ -238,13 +224,13 @@ public class TableItemOverviewController {
         // 如果之前存在.dat数据，则优先读取
 
         this.datFile = new File(ReadData.getDatPath(file, chosenCourse.get()));
-        System.out.println(datFile);
+//        System.out.println(datFile);
 
 
 //        ScoreTable scoreTable;
         if (datFile.exists()) {
             scoreTable = ReadData.readTableData(ReadData.getDatPath(file, chosenCourse.get()));
-            System.out.println("DAT 读取成功");
+//            System.out.println("DAT 读取成功");
         } else scoreTable = new ScoreTable(ReadData.readStudentFile(file.getAbsolutePath()), chosenCourse.get());
 
         // 清除数据后重新添加
@@ -272,7 +258,7 @@ public class TableItemOverviewController {
 
     @FXML
     private void save() throws IOException {
-        WriteData.writeTable2File(scoreTable, ReadData.getDatPath(file, "数据库系统"));
+        WriteData.writeTable2File(scoreTable, ReadData.getDatPath(file, chosenCourse.get()));
     }
 
     private void initSearchField() {
@@ -304,21 +290,21 @@ public class TableItemOverviewController {
                     datFile = new File(ReadData.getDatPath(file, chosenCourse.get()));
                     if (datFile.exists()) {
                         scoreTable = ReadData.readTableData(ReadData.getDatPath(file, chosenCourse.get()));
-                        System.out.println("DAT 读取成功");
                     } else
                         scoreTable = new ScoreTable(ReadData.readStudentFile(file.getAbsolutePath()), chosenCourse.get());
+                    mainApp.getStudentData().setAll(scoreTable.getItems());
+                    filteredTable.setAll(scoreTable.getItems());
+                    table.setItems(filteredTable);
+                    analyse(); // 刷新统计数据
+                    refreshPieChart();
+                    refreshBarChart();
+                    table.refresh();
                 } catch (IOException e) {
                     System.out.println("Can't change course.");
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-                mainApp.getStudentData().setAll(scoreTable.getItems());
-                filteredTable.addAll(scoreTable.getItems());
-                table.setItems(filteredTable);
-                analyse(); // 刷新统计数据
-                refreshPieChart();
-                refreshBarChart();
             }
         });
     }

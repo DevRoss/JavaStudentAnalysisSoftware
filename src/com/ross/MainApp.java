@@ -1,8 +1,5 @@
 package com.ross;
 
-import java.io.IOException;
-
-import com.ross.model.Student;
 import com.ross.model.TableItem;
 import com.ross.view.TableItemOverviewController;
 import javafx.application.Application;
@@ -10,10 +7,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class MainApp extends Application {
 
