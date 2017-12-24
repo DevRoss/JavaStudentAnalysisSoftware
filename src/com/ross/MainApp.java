@@ -3,6 +3,7 @@ package com.ross;
 import com.ross.model.TableItem;
 import com.ross.view.TableItemOverviewController;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +19,8 @@ public class MainApp extends Application {
     private VBox rootLayout;
     private ObservableList<TableItem> studentData = FXCollections.observableArrayList();
     private Scene scene;
-
+    private Stage aboutStage = new Stage();
+    private Stage helpStage = new Stage();
 
     public MainApp() {
 //        studentData.add(new TableItem("cjcj", "12355235626", 0.0));
@@ -35,6 +37,7 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("AddressApp");
+        this.primaryStage.setOnCloseRequest(event -> exit());
 
         initRootLayout();
 
@@ -84,5 +87,19 @@ public class MainApp extends Application {
 
     public Scene getScene() {
         return scene;
+    }
+
+    public void exit() {
+        aboutStage.close();
+        helpStage.close();
+        Platform.exit();
+    }
+
+    public Stage getAboutStage() {
+        return aboutStage;
+    }
+
+    public Stage getHelpStage() {
+        return helpStage;
     }
 }

@@ -11,11 +11,15 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.chart.PieChart.Data;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import util.Filter;
 import util.ReadData;
 import util.WriteData;
@@ -274,7 +278,7 @@ public class TableItemOverviewController {
 
     @FXML
     private void exit() {
-        Platform.exit();
+        mainApp.exit();
     }
 
     private void initCourseChoiceBox() throws IOException, ClassNotFoundException {
@@ -309,4 +313,37 @@ public class TableItemOverviewController {
         });
     }
 
+    @FXML
+    private void showAbout() {
+
+        mainApp.getAboutStage().setTitle("关于");
+        VBox root = new VBox();
+        root.setSpacing(5);
+        root.setAlignment(Pos.CENTER);
+
+        Label aboutAuthor = new Label("作者：DevRoss");
+        Label aboutGitHub = new Label("GitHub：https://github.com/DevRoss");
+        Label aboutCopyright = new Label("Copyright 2017 The Software Authors. All Rights Reserved.");
+
+        root.getChildren().addAll(aboutCopyright, aboutAuthor, aboutGitHub);
+        Scene scene = new Scene(root, 600, 100);
+        mainApp.getAboutStage().setScene(scene);
+        mainApp.getAboutStage().show();
+
+    }
+
+    @FXML
+    private void showHelp() {
+        mainApp.getHelpStage().setTitle("帮助");
+        VBox root = new VBox();
+        root.setSpacing(5);
+        root.setAlignment(Pos.CENTER);
+
+        Label mainHelp = new Label("将course.txt文件放在当前文件夹\n成绩单资源文件保存后会放在resource文件夹");
+        Label searchHelp = new Label("输入搜索关键词，可同时搜索学号，姓名，成绩");
+        root.getChildren().addAll(mainHelp, searchHelp);
+        Scene scene = new Scene(root, 600, 100);
+        mainApp.getHelpStage().setScene(scene);
+        mainApp.getHelpStage().show();
+    }
 }
