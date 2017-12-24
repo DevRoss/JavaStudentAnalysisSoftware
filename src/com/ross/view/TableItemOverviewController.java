@@ -5,9 +5,15 @@ import com.ross.model.ScoreTable;
 import com.ross.model.TableItem;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.chart.*;
 import javafx.scene.chart.PieChart.Data;
@@ -100,7 +106,6 @@ public class TableItemOverviewController {
 
     private File file = new File("");
     private File datFile = new File("");
-    private String courseName = "";
     final static File workingDir = new File("");
     private ScoreTable scoreTable;
     private ObservableList<TableItem> filteredTable = FXCollections.observableArrayList();
@@ -113,6 +118,12 @@ public class TableItemOverviewController {
     @FXML
     private MenuItem fileOpenItem;
 
+    @FXML
+    private ChoiceBox<String> courseChoiceBox;
+
+    private ObservableList<String> courseList = FXCollections.observableArrayList();
+    private static StringProperty chosenCourse;
+
     private MainApp mainApp;
 
     private NumberFormat perFormat;
@@ -123,9 +134,10 @@ public class TableItemOverviewController {
     }
 
     @FXML
-    private void initialize() {
+    private void initialize() throws IOException, ClassNotFoundException {
         initBarChart();
         initTable();
+        initCourseChoiceBox();
     }
 
     private void initTable() {
@@ -177,8 +189,8 @@ public class TableItemOverviewController {
 
     }
 
-    private void initBarChart(){
-     barChart.getData().add(getBarChartData(true));
+    private void initBarChart() {
+        barChart.getData().add(getBarChartData(true));
     }
 
     private void refreshBarChart() {
@@ -225,19 +237,15 @@ public class TableItemOverviewController {
         this.file = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
         // 如果之前存在.dat数据，则优先读取
 
-
-        courseName = "数据库系统";
-
-
-        this.datFile = new File(ReadData.getDatPath(file, courseName));
+        this.datFile = new File(ReadData.getDatPath(file, chosenCourse.get()));
         System.out.println(datFile);
 
 
 //        ScoreTable scoreTable;
         if (datFile.exists()) {
-            scoreTable = ReadData.readTableData(ReadData.getDatPath(file, courseName));
+            scoreTable = ReadData.readTableData(ReadData.getDatPath(file, chosenCourse.get()));
             System.out.println("DAT 读取成功");
-        } else scoreTable = new ScoreTable(ReadData.readStudentFile(file.getAbsolutePath()), courseName);
+        } else scoreTable = new ScoreTable(ReadData.readStudentFile(file.getAbsolutePath()), chosenCourse.get());
 
         // 清除数据后重新添加
 //        mainApp.getStudentData().clear();
@@ -282,4 +290,37 @@ public class TableItemOverviewController {
     private void exit() {
         Platform.exit();
     }
+
+    private void initCourseChoiceBox() throws IOException, ClassNotFoundException {
+        courseList.addAll(ReadData.loadCourseList());
+        courseChoiceBox.setItems(courseList);
+        chosenCourse = new SimpleStringProperty(courseList.get(0));
+        courseChoiceBox.valueProperty().bindBidirectional(chosenCourse);
+        courseChoiceBox.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                chosenCourse.set(courseChoiceBox.getSelectionModel().selectedItemProperty().get());
+                try {
+                    datFile = new File(ReadData.getDatPath(file, chosenCourse.get()));
+                    if (datFile.exists()) {
+                        scoreTable = ReadData.readTableData(ReadData.getDatPath(file, chosenCourse.get()));
+                        System.out.println("DAT 读取成功");
+                    } else
+                        scoreTable = new ScoreTable(ReadData.readStudentFile(file.getAbsolutePath()), chosenCourse.get());
+                } catch (IOException e) {
+                    System.out.println("Can't change course.");
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                mainApp.getStudentData().setAll(scoreTable.getItems());
+                filteredTable.addAll(scoreTable.getItems());
+                table.setItems(filteredTable);
+                analyse(); // 刷新统计数据
+                refreshPieChart();
+                refreshBarChart();
+            }
+        });
+    }
+
 }

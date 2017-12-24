@@ -40,20 +40,6 @@
             <MenuItem mnemonicParsing="false" onAction="#exit" text="退出" />
           </items>
         </Menu>
-        <Menu mnemonicParsing="false" text="编辑">
-          <items>
-            <MenuItem mnemonicParsing="false" text="Undo" />
-            <MenuItem mnemonicParsing="false" text="Redo" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Cut" />
-            <MenuItem mnemonicParsing="false" text="Copy" />
-            <MenuItem mnemonicParsing="false" text="Paste" />
-            <MenuItem mnemonicParsing="false" text="Delete" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Select All" />
-            <MenuItem mnemonicParsing="false" text="Unselect All" />
-          </items>
-        </Menu>
         <Menu mnemonicParsing="false" text="帮助">
           <items>
             <MenuItem mnemonicParsing="false" text="About……" />
@@ -76,6 +62,7 @@
                      </columnResizePolicy>
                   </TableView>
                   <TextField fx:id="searchField" layoutY="-1.0" prefHeight="30.0" prefWidth="174.0" promptText="搜索学号 分数 姓名" />
+                  <ChoiceBox fx:id="courseChoiceBox" layoutX="206.0" layoutY="-1.0" prefWidth="150.0" />
                </children>
             </AnchorPane>
           <AnchorPane>

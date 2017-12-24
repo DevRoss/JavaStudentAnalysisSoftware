@@ -78,4 +78,12 @@ public class ReadData {
         return resourcePrefix + getFileNameNoEx(studentFile.getName()) + "-" + courseName + ".dat";
     }
 
+    public static ArrayList<String> loadCourseList() throws IOException {
+        ArrayList<Course> courses = readCourseFile();
+        ArrayList<String> courseNames = new ArrayList<String>();
+        for (Course course : courses) {
+            courseNames.add(course.getName());
+        }
+        return courseNames;
+    }
 }
