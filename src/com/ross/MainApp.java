@@ -42,7 +42,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("AddressApp");
+        this.primaryStage.setTitle("成绩录入和分析系统");
         this.primaryStage.setOnCloseRequest(event -> exit());
         try (FileInputStream image = new FileInputStream("icon.jpg")) {
             primaryStage.getIcons().add(new Image(image));
